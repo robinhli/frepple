@@ -35,6 +35,12 @@ urlpatterns = [
         name="execute_launch",
     ),
     url(
+        r"^execute/selectedsaleplan/$",
+        freppledb.execute.views.selectedSalePlan,
+        name="execute_selectedSalePlan",
+    ),
+
+    url(
         r"^execute/cancel/(.+)/$",
         freppledb.execute.views.CancelTask,
         name="execute_cancel",

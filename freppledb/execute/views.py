@@ -59,6 +59,8 @@ from freppledb.common.report import (
     GridFieldText,
     GridFieldInteger,
 )
+from freppledb.input.models import Demand
+
 from .management.commands.runworker import launchWorker
 
 import logging
@@ -285,6 +287,23 @@ def LaunchTask(request, action):
             force_text(_("Failure launching action: %(msg)s") % {"msg": e}),
         )
         return HttpResponseRedirect("%s/execute/" % request.prefix)
+
+def selectedSalePlan(request):
+    args = request.POST
+
+    name_list = args.getlist('demand[]')
+
+    # first set the selected sales to open and all other sales to close,
+    Demand.objects.all().using(request.database).exclude(pk__in=name_list).update(
+        status='closed'
+    )
+    Demand.objects.all().using(request.database).filter(pk__in=name_list).update(
+        status='open'
+    )
+
+    # then call wrapTask
+    wrapTask(request, "runplan")
+    return HttpResponseRedirect("%s/execute/" % request.prefix)
 
 
 def wrapTask(request, action):

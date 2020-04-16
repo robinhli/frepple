@@ -3026,6 +3026,11 @@ class DemandList(GridReport):
                 "name": "erp_incr_export",
                 "label": format_lazy("export to {erp}", erp=settings.ERP_CONNECTOR),
                 "function": "ERPconnection.SODepExport(jQuery('#grid'),'SO')",
+            },
+            {
+                "name": "erp_incr_export_2",
+                "label": format_lazy("排程", erp=settings.ERP_CONNECTOR),
+                "function": "ERPconnection.SOPlanSelected(jQuery('#grid'))",
             }
         ]
     else:

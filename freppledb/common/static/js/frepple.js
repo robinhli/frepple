@@ -1873,6 +1873,19 @@ var ERPconnection = {
       $("#actions1").html($("#actionsul").children().first().text() + '  <span class="caret"></span>');
     },
 
+//  ----------------------------------------------------------------------------
+//  generate a supply plan only for selected Sales Orders
+//  ----------------------------------------------------------------------------
+    SOPlanSelected: function(grid, transactiontype) {
+
+        $.post(url_prefix + "/execute/selectedsaleplan/",
+            {'demand': sel, 'env': 'supply'},
+            function (data, status) {
+            }
+        )
+        setTimeout("javascript:location.href=url_prefix + \"/execute/\"", 3000);
+    },
+
 
 //  ----------------------------------------------------------------------------
 //  Sales Orders dependencies export
