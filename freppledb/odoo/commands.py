@@ -159,9 +159,16 @@ class OdooReadData(PlanTask):
             raise e
 
         # Download and parse XML data
+        file = settings.FREPPLE_LOGDIR + '/xml-4.xml'
         context = ssl._create_unverified_context()
         with urlopen(request,  context=context) as f:
-            frepple.readXMLdata(f.read().decode("utf-8"), False, False)
+            xml = f.read().decode("utf-8")
+            with open(file, 'w') as fxml:
+                fxml.write(xml)
+        with open(file) as f:
+            frepple.readXMLdata(f.read(), False, False)
+        # with urlopen(request,  context=context) as f:
+        #     frepple.readXMLdata(f.read().decode("utf-8"), False, False)
 
         # Assure single root hierarchies
         for r in frepple.items():
@@ -312,6 +319,9 @@ class OdooWritePlan(PlanTask):
                         int(i.criticality),
                     )
                 elif i.ordertype == "MO":
+                    if type(i.operation) == frepple.operation_routing:
+                        cls.exported.append(i)
+                        continue
                     if (
                         not i.operation
                         or not i.operation.source
@@ -325,7 +335,7 @@ class OdooWritePlan(PlanTask):
                     try:
                         for j in i.loadplans:
                             res.add(j.resource.name)
-                        logger.info(res)
+                        # logger.info(res)
                         resource = i.resource
                     except:
                         pass

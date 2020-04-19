@@ -303,7 +303,8 @@ def selectedSalePlan(request):
 
     # then call wrapTask
     wrapTask(request, "runplan")
-    return HttpResponseRedirect("%s/execute/" % request.prefix)
+    return HttpResponse()
+    # return HttpResponseRedirect("%s/execute/" % request.prefix)
 
 
 def wrapTask(request, action):
