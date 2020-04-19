@@ -1877,13 +1877,14 @@ var ERPconnection = {
 //  generate a supply plan only for selected Sales Orders
 //  ----------------------------------------------------------------------------
     SOPlanSelected: function(grid, transactiontype) {
-
+        var sel = grid.jqGrid('getGridParam','selarrrow');
         $.post(url_prefix + "/execute/selectedsaleplan/",
             {'demand': sel, 'env': 'supply'},
             function (data, status) {
+        location.href=url_prefix + "/execute/"
+
             }
         )
-        setTimeout("javascript:location.href=url_prefix + \"/execute/\"", 3000);
     },
 
 
