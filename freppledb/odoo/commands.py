@@ -60,7 +60,7 @@ class OdooReadData(PlanTask):
     addon module and can vary between implementations.
     """
 
-    description = "Load Odoo data"
+    description = "Load MES data"
     sequence = 119
     label = ("odoo_read_1", _("Read MES data"))
 
@@ -162,11 +162,11 @@ class OdooReadData(PlanTask):
         file = settings.FREPPLE_LOGDIR + '/xml-4.xml'
         context = ssl._create_unverified_context()
         with urlopen(request,  context=context) as f:
-            xml = f.read().decode("utf-8")
-            with open(file, 'w') as fxml:
+            xml = f.read()
+            with open(file, 'wb') as fxml:
                 fxml.write(xml)
-        with open(file) as f:
-            frepple.readXMLdata(f.read(), False, False)
+        with open(file, 'rb') as f:
+            frepple.readXMLdata(f.read().decode("utf-8"), False, False)
         # with urlopen(request,  context=context) as f:
         #     frepple.readXMLdata(f.read().decode("utf-8"), False, False)
 
