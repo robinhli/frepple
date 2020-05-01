@@ -160,13 +160,19 @@ class OdooReadData(PlanTask):
 
         # Download and parse XML data
         file = settings.FREPPLE_LOGDIR + '/xml-4.xml'
-        context = ssl._create_unverified_context()
-        with urlopen(request,  context=context) as f:
+        basic_file = settings.FREPPLE_LOGDIR + '/basic.xml'
+        # context = ssl._create_unverified_context()
+        with urlopen(request) as f:
             xml = f.read()
             with open(file, 'wb') as fxml:
                 fxml.write(xml)
+        logger.info(" get request from MES, write to file")
+        with open(basic_file, 'rb') as basic_f:
+            frepple.readXMLdata(basic_f.read().decode("utf-8"), False, False)
+        logger.info("Read basic finished")
         with open(file, 'rb') as f:
             frepple.readXMLdata(f.read().decode("utf-8"), False, False)
+        logger.info("Read file finished")
         # with urlopen(request,  context=context) as f:
         #     frepple.readXMLdata(f.read().decode("utf-8"), False, False)
 
