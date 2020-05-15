@@ -338,6 +338,11 @@ def wrapTask(request, action):
             env.append(value)
         if env:
             task.arguments = "%s --env=%s" % (task.arguments, ",".join(env))
+        if 'odoo_read_1' in env:
+            # added a empty task before this one.
+            emptyTask = Task(name="empty", submitted=now, status="Waiting", user=request.user,
+                             arguments="--models=input.demand,input.deliveryorder,input.item,input.location,input.customer,input.distributionorder,input.operationplanmaterial,input.buffer,input.itemdistribution,input.operationplanresource,input.resource,input.skill,input.resourceskill,input.setupmatrix,input.setuprule,input.purchaseorder,input.supplier,input.itemsupplier,input.manufacturingorder,input.calendar,input.calendarbucket,input.operation,input.operationmaterial,input.operationresource,input.suboperation")
+            emptyTask.save(using=request.database)
         task.save(using=request.database)
     # C
     elif action in ("frepple_flush", "empty"):
